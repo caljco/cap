@@ -16,6 +16,7 @@
         body {
             font-family: system-ui, sans-serif;
             background-color: var(--background-color); margin: 0; display: flex;
+            flex-direction: column; /* Allow main and footer to stack */
             justify-content: center; align-items: center; min-height: 100vh;
         }
         .portal-container {
@@ -47,6 +48,10 @@
             font-size: 0.9rem; font-weight: bold; border-radius: 6px; cursor: pointer;
             margin-top: 1.5rem; float: right;
         }
+        .page-footer {
+            margin-top: 2rem;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -61,9 +66,10 @@
 
     </main>
 
-    <div style="text-align: center; margin-top: 20px;">
+    <footer class="page-footer">
         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAAAYCAYAAACneFpRAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwgAADsIBFShKgAAAABh0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMS41ZYUyZQAAA+JJREFUWEfFl11oHFUYx/+ve+40bTaszZKlDbpFC4W02oMSsZRCxUMpWkF86FNB8KCiF/TgQUV8UR/1Fz0o2HvxoZDefCiIsEBQvLTIK4XQxA8l1SIWq1hTt9ndmZ3d+V0S0ca2s01/4O+d/8x/5zfz/5/5B853e3s72tnZ0crlciYmJk59P/eDg4M6ODg4tG5+gH8P6rP5/B0aGkKs16sW5+fne9E+ADzV3Nxc9m0xU43k8/kO9vn56dHV1bXy/5wzE013d7c3xL/47u3tRTwef4pEIl/38vLSptvMrixWk2h6enq85PP575NSqfT3y8tLh9Fo5Nvb2w+7u7ul8Xjs9fX140wmM/i+vj4lVqtxFEXp8fExjDFUKvX04uIiSCQSWi6XS73ej6Io3MrKikaj0al4PD4+lUolS6lUWoWjWywWtGme4vP5/jQajcpIJJJzW1tbtayszKejoyNWS02/33/cZrPZ2traWk2mS21tLYIg0G63E4/Hi/b29hweHjYajUbK5XJOEALBNE19fX02tP/7fW5ubgoYw/X1dRRFkcvl0jRNr9crpJRss1l2dHQkSRL7+/uJRqOK4+PjdXV12d3dbZqmzc3NnJ6e3tnY2GgZGRmJ7e3tN0KhsL29vb2pqamfC4UCaZq3Njc3/S0tLdk/40w+n+/7/f5v11qtFpIkeyaTyZunp6cul8uSJEldXV0b3d3deQAy/ePjY5PJZFhYWMhmszn4vu+FQiEMw5DP50mn06S1iMfjYxiGQqHg8vIyzs7OWGv58uVLtm3btm3p6elwXReXyyWoP25ubtJ2yWQyzs/P0+l0aK37xIkTOHLkCDabrUKhIGecc3d3FxaLxbm5ubwX9155njc5jDFA585Wq5XJZEIIzL/k8/kRBoPhjY2Nd41G4yG8/p6enu/c3NzfHqHAnp4eJpNJpJRcXV1VW1vbS/f5fH9LKMqsVmuTy+U3nF+pVGJRFCnLsmKxOIKhUJj+/v5bBwcHCQAg1t/fP55Op5fG4/FzKaVzTdP0ej2SJLPZLKvV2t/ff7G+vv41BoPhW0IIJJPJb0xMTPgqleprhBBmZ2cTYO73ej1SSi6Xy+VyuQMDA36/X39/f6lWq5f5+fnv+L7vhUKhU9euXavValVXV1daLBbL5XL5fD6lUonVam0zDIO9vb1cXV0t9vf3n6d/8h94LhQK+Xw+5+bm/H4/yWQy/wQoigJAlmX5Y3x8/OQ/5B/43k2v13t6efl/P//887f5P81dY+3t7T/F/wH0yX+RjDHb29t/AAAA//8DAAD//wMAAP//AwAA//8DAAD//wMAAP//AwAA//8DAAD//wMAAP//AwAA//8DAAD//wMAAP//A1D8f918AABtq1zLAAAAAElFTkSuQmCC">
-    </div>
+    </footer>
+    
     <div id="modal-overlay" class="modal-overlay hidden"></div>
     <div id="terms-modal" class="modal-content hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
         <header class="modal-header">
@@ -114,10 +120,10 @@
             <p>We may, in our sole discretion, terminate or suspend your access to the Service at any time, for any reason or no reason, without prior notice.</p>
 
             <strong>10. Privacy Policy</strong>
-            <p>By using the Service, you acknowledge that we may collect and use certain information, such as your device's MAC address and traffic data, for the purposes of providing and managing the network. For more information, please review our full Privacy Policy [Optional: insert link here].</p>
+            <p>By using the Service, you acknowledge that we may collect and use certain information, such as your device's MAC address and traffic data, for the purposes of providing and managing the network. For more information, please our IT Services Department.</p>
 
             <strong>11. Governing Law and Jurisdiction</strong>
-            <p>This Agreement shall be governed by and construed in accordance with the laws of the State of Ohio, without regard to its conflict of law principles. You agree to submit to the exclusive jurisdiction of the state and federal courts located in [Insert County and State, e.g., Santa Clara County, California] for the resolution of any disputes.</p>
+            <p>This Agreement shall be governed by and construed in accordance with the laws of the State of Ohio, without regard to its conflict of law principles. You agree to submit to the exclusive jurisdiction of the state and federal courts located in Allen County, Ohio for the resolution of any disputes.</p>
 
             <strong>12. General Provisions</strong>
             <p>This Agreement constitutes the entire agreement between you and the Provider regarding the Service. If any provision of this Agreement is found to be unenforceable, the remaining provisions will remain in full force and effect. Our failure to enforce any right or provision of this Agreement will not be considered a waiver of those rights.</p>
