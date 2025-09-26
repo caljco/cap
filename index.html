@@ -24,11 +24,8 @@
         }
         h1 { color: var(--primary-text-color); margin: 0 0 0.5rem 0; font-size: 1.75rem; }
         p { color: var(--secondary-text-color); margin: 0 0 1.5rem 0; line-height: 1.5; }
-        
-        /* CSS change for new link layout */
         p.terms-agreement { margin-bottom: 0.5rem; }
         p.terms-link-container { margin-top: 0; }
-
         p a { color: var(--primary-color); font-weight: 500; text-decoration: none; cursor: pointer; }
         p a:hover { text-decoration: underline; }
         .accept-button {
@@ -191,7 +188,6 @@
                 modalOverlay.classList.remove('hidden');
                 closeModalBtnTop.focus();
             };
-
             const hideModal = () => {
                 termsModal.classList.add('hidden');
                 modalOverlay.classList.add('hidden');
