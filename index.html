@@ -24,11 +24,8 @@
         }
         h1 { color: var(--primary-text-color); margin: 0 0 0.5rem 0; font-size: 1.75rem; }
         p { color: var(--secondary-text-color); margin: 0 0 1.5rem 0; line-height: 1.5; }
-        
-        /* Style adjustments for the new layout */
         p.terms-agreement { margin-bottom: 0.5rem; }
         p.terms-link-container { margin-top: 0; }
-
         p a { color: var(--primary-color); font-weight: 500; text-decoration: none; cursor: pointer; }
         p a:hover { text-decoration: underline; }
         .accept-button {
@@ -80,6 +77,8 @@
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            const sharedSecret = 'AristaPassword123!';
+
             const acceptBtn = document.getElementById('accept-btn');
             const termsLink = document.getElementById('terms-link');
             const termsModal = document.getElementById('terms-modal');
@@ -87,9 +86,55 @@
             const closeModalBtnTop = document.getElementById('close-modal-top');
             const closeModalBtnBottom = document.getElementById('close-modal-bottom');
 
-            // The authentication script would be here...
+            termsLink.focus();
 
-            // --- Modal Logic ---
+            const urlParams = new URLSearchParams(window.location.search);
+            const loginUrl = urlParams.get('login_url');
+            const challenge = urlParams.get('challenge');
+
+            function bufferToHex(buffer) {
+                return Array.from(new Uint8Array(buffer))
+                    .map(b => b.toString(16).padStart(2, '0'))
+                    .join('');
+            }
+
+            async function authenticate() {
+                try {
+                    const encoder = new TextEncoder();
+                    
+                    const secretData = encoder.encode(sharedSecret);
+                    const secretHash = await window.crypto.subtle.digest('SHA-1', secretData);
+                    const hmacKey = await window.crypto.subtle.importKey(
+                        'raw', secretHash, { name: 'HMAC', hash: 'SHA-1' }, false, ['sign']
+                    );
+
+                    const res = 'success';
+                    const messageString = `res=${res}&challenge=${challenge}`;
+                    const messageData = encoder.encode(messageString);
+
+                    const digestBuffer = await window.crypto.subtle.sign('HMAC', hmacKey, messageData);
+                    const digest = bufferToHex(digestBuffer);
+
+                    const finalUrl = new URL(loginUrl);
+                    finalUrl.searchParams.set('res', res);
+                    finalUrl.searchParams.set('challenge', challenge);
+                    finalUrl.searchParams.set('digest', digest);
+
+                    window.location.href = finalUrl.href;
+
+                } catch (error) {
+                    console.error('Authentication Error:', error);
+                    acceptBtn.textContent = 'Error!';
+                    acceptBtn.disabled = true;
+                }
+            }
+
+            if (loginUrl && challenge) {
+                acceptBtn.addEventListener('click', authenticate);
+            } else {
+                acceptBtn.textContent = 'Connect (Testing Mode)';
+            }
+
             const showModal = (event) => {
                 event.preventDefault();
                 termsModal.classList.remove('hidden');
@@ -99,7 +144,6 @@
             const hideModal = () => {
                 termsModal.classList.add('hidden');
                 modalOverlay.classList.add('hidden');
-                // Set focus to the Accept button after closing
                 acceptBtn.focus();
             };
 
