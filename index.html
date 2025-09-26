@@ -60,6 +60,10 @@
         </form>
 
     </main>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAAAYCAYAAACneFpRAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwgAADsIBFShKgAAAABh0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMS41ZYUyZQAAA+JJREFUWEfFl11oHFUYx/+ve+40bTaszZKlDbpFC4W02oMSsZRCxUMpWkF86FNB8KCiF/TgQUV8UR/1Fz0o2HvxoZDefCiIsEBQvLTIK4XQxA8l1SIWq1hTt9ndmZ3d+V0S0ca2s01/4O+d/8x/5zfz/5/5B853e3s72tnZ0crlciYmJk59P/eDg4M6ODg4tG5+gH8P6rP5/B0aGkKs16sW5+fne9E+ADzV3Nxc9m0xU43k8/kO9vn56dHV1bXy/5wzE013d7c3xL/47u3tRTwef4pEIl/38vLSptvMrixWk2h6enq85PP575NSqfT3y8tLh9Fo5Nvb2w+7u7ul8Xjs9fX140wmM/i+vj4lVqtxFEXp8fExjDFUKvX04uIiSCQSWi6XS73ej6Io3MrKikaj0al4PD4+lUolS6lUWoWjWywWtGme4vP5/jQajcpIJJJzW1tbtayszKejoyNWS02/33/cZrPZ2traWk2mS21tLYIg0G63E4/Hi/b29hweHjYajUbK5XJOEALBNE19fX02tP/7fW5ubgoYw/X1dRRFkcvl0jRNr9crpJRss1l2dHQkSRL7+/uJRqOK4+PjdXV12d3dbZqmzc3NnJ6e3tnY2GgZGRmJ7e3tN0KhsL29vb2pqamfC4UCaZq3Njc3/S0tLdk/40w+n+/7/f5v11qtFpIkeyaTyZunp6cul8uSJEldXV0b3d3deQAy/ePjY5PJZFhYWMhmszn4vu+FQiEMw5DP50mn06S1iMfjYxiGQqHg8vIyzs7OWGv58uVLtm3btm3p6elwXReXyyWoP25ubtJ2yWQyzs/P0+l0aK37xIkTOHLkCDabrUKhIGecc3d3FxaLxbm5ubwX9155njc5jDFA585Wq5XJZEIIzL/k8/kRBoPhjY2Nd41G4yG8/p6enu/c3NzfHqHAnp4eJpNJpJRcXV1VW1vbS/f5fH9LKMqsVmuTy+U3nF+pVGJRFCnLsmKxOIKhUJj+/v5bBwcHCQAg1t/fP55Op5fG4/FzKaVzTdP0ej2SJLPZLKvV2t/ff7G+vv41BoPhW0IIJJPJb0xMTPgqleprhBBmZ2cTYO73ej1SSi6Xy+VyuQMDA36/X39/f6lWq5f5+fnv+L7vhUKhU9euXavValVXV1daLBbL5XL5fD6lUonVam0zDIO9vb1cXV0t9vf3n6d/8h94LhQK+Xw+5+bm/H4/yWQy/wQoigJAlmX5Y3x8/OQ/5B/43k2v13t6efl/P//887f5P81dY+3t7T/F/wH0yX+RjDHb29t/AAAA//8DAAD//wMAAP//AwAA//8DAAD//wMAAP//AwAA//8DAAD//wMAAP//AwAA//8DAAD//wMAAP//A1D8f918AABtq1zLAAAAAElFTkSuQmCC">
+    </div>
     <div id="modal-overlay" class="modal-overlay hidden"></div>
     <div id="terms-modal" class="modal-content hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
         <header class="modal-header">
@@ -139,17 +143,13 @@
             const loginUrl = urlParams.get('login_url');
             const challenge = urlParams.get('challenge');
             
-            // --- PERFORMANCE OPTIMIZATION ---
-            // A variable to hold the pre-calculated crypto key.
             let hmacKey = null;
             
-            // This new function prepares the key as soon as the page loads.
             async function prepareCryptoKey() {
                 try {
                     const encoder = new TextEncoder();
                     const secretData = encoder.encode(sharedSecret);
                     const secretHash = await window.crypto.subtle.digest('SHA-1', secretData);
-                    // Store the prepared key in the global variable for later use.
                     hmacKey = await window.crypto.subtle.importKey(
                         'raw', secretHash, { name: 'HMAC', hash: 'SHA-1' }, false, ['sign']
                     );
@@ -159,7 +159,6 @@
                     acceptBtn.disabled = true;
                 }
             }
-            // --- END OPTIMIZATION ---
 
             function bufferToHex(buffer) {
                 return Array.from(new Uint8Array(buffer))
@@ -177,7 +176,6 @@
                     const messageString = `res=${res}&challenge=${challenge}`;
                     const messageData = encoder.encode(messageString);
 
-                    // This step is now faster as it uses the pre-calculated key.
                     const digestBuffer = await window.crypto.subtle.sign('HMAC', hmacKey, messageData);
                     const digest = bufferToHex(digestBuffer);
 
@@ -196,7 +194,6 @@
             }
 
             if (loginUrl && challenge) {
-                // Start preparing the key in the background as soon as the page loads.
                 prepareCryptoKey();
                 acceptBtn.addEventListener('click', authenticate);
 
