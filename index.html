@@ -24,8 +24,11 @@
         }
         h1 { color: var(--primary-text-color); margin: 0 0 0.5rem 0; font-size: 1.75rem; }
         p { color: var(--secondary-text-color); margin: 0 0 1.5rem 0; line-height: 1.5; }
+        
+        /* CSS change for new link layout */
         p.terms-agreement { margin-bottom: 0.5rem; }
         p.terms-link-container { margin-top: 0; }
+
         p a { color: var(--primary-color); font-weight: 500; text-decoration: none; cursor: pointer; }
         p a:hover { text-decoration: underline; }
         .accept-button {
@@ -37,36 +40,15 @@
         .accept-button:disabled { background-color: #999; cursor: not-allowed; }
         .hidden { display: none; }
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 100; }
-        .modal-content {
-            position: fixed; top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            background: white; border-radius: 8px;
-            width: 90%; max-width: 600px; max-height: 80vh;
-            z-index: 101; text-align: left;
-            display: flex;
-            flex-direction: column;
-        }
-        .modal-header {
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid #dee2e6;
-            display: flex; justify-content: space-between; align-items: center;
-        }
+        .modal-content { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 1.5rem; border-radius: 8px; width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto; z-index: 101; text-align: left; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #dee2e6; padding-bottom: 1rem; margin-bottom: 1rem; }
         .modal-header h2 { margin: 0; font-size: 1.25rem; }
         .close-button { font-size: 1.5rem; font-weight: bold; border: none; background: none; cursor: pointer; color: #888; }
-        .modal-body {
-            padding: 1.5rem;
-            font-size: 0.9rem; line-height: 1.6; color: var(--secondary-text-color);
-            overflow-y: auto;
-        }
-        .modal-footer {
-            padding: 1rem 1.5rem;
-            border-top: 1px solid #dee2e6;
-            display: flex;
-            justify-content: flex-end;
-        }
+        .modal-body { font-size: 0.9rem; line-height: 1.6; color: var(--secondary-text-color); }
         .modal-footer-close {
             background-color: var(--secondary-text-color); color: white; border: none; padding: 10px 20px;
             font-size: 0.9rem; font-weight: bold; border-radius: 6px; cursor: pointer;
+            margin-top: 1.5rem; float: right;
         }
     </style>
 </head>
@@ -138,15 +120,15 @@
 
             <strong>12. General Provisions</strong>
             <p>This Agreement constitutes the entire agreement between you and the Provider regarding the Service. If any provision of this Agreement is found to be unenforceable, the remaining provisions will remain in full force and effect. Our failure to enforce any right or provision of this Agreement will not be considered a waiver of those rights.</p>
-        </section>
-        <footer class="modal-footer">
+            
             <button id="close-modal-bottom" type="button" class="modal-footer-close">Close</button>
-        </footer>
+            <div style="clear:both;"></div>
+        </section>
     </div>
     <script>
-        // The complete, working JavaScript from the last functional version.
         document.addEventListener('DOMContentLoaded', () => {
             const sharedSecret = 'AristaPassword123!';
+
             const acceptBtn = document.getElementById('accept-btn');
             const termsLink = document.getElementById('terms-link');
             const termsModal = document.getElementById('terms-modal');
@@ -161,25 +143,35 @@
             const challenge = urlParams.get('challenge');
 
             function bufferToHex(buffer) {
-                return Array.from(new Uint8Array(buffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+                return Array.from(new Uint8Array(buffer))
+                    .map(b => b.toString(16).padStart(2, '0'))
+                    .join('');
             }
 
             async function authenticate() {
                 try {
                     const encoder = new TextEncoder();
+                    
                     const secretData = encoder.encode(sharedSecret);
                     const secretHash = await window.crypto.subtle.digest('SHA-1', secretData);
-                    const hmacKey = await window.crypto.subtle.importKey('raw', secretHash, { name: 'HMAC', hash: 'SHA-1' }, false, ['sign']);
+                    const hmacKey = await window.crypto.subtle.importKey(
+                        'raw', secretHash, { name: 'HMAC', hash: 'SHA-1' }, false, ['sign']
+                    );
+
                     const res = 'success';
                     const messageString = `res=${res}&challenge=${challenge}`;
                     const messageData = encoder.encode(messageString);
+
                     const digestBuffer = await window.crypto.subtle.sign('HMAC', hmacKey, messageData);
                     const digest = bufferToHex(digestBuffer);
+
                     const finalUrl = new URL(loginUrl);
                     finalUrl.searchParams.set('res', res);
                     finalUrl.searchParams.set('challenge', challenge);
                     finalUrl.searchParams.set('digest', digest);
+
                     window.location.href = finalUrl.href;
+
                 } catch (error) {
                     console.error('Authentication Error:', error);
                     acceptBtn.textContent = 'Error!';
@@ -199,9 +191,11 @@
                 modalOverlay.classList.remove('hidden');
                 closeModalBtnTop.focus();
             };
+
             const hideModal = () => {
                 termsModal.classList.add('hidden');
                 modalOverlay.classList.add('hidden');
+                // JavaScript Change: Focus is now moved to the Accept button
                 acceptBtn.focus();
             };
 
