@@ -40,7 +40,7 @@
         .modal-header h2 { margin: 0; font-size: 1.25rem; }
         .close-button { font-size: 1.5rem; font-weight: bold; border: none; background: none; cursor: pointer; color: #888; }
         .modal-body { font-size: 0.9rem; line-height: 1.6; color: var(--secondary-text-color); }
-        .modal-footer-close { /* Style for the new bottom close button */
+        .modal-footer-close {
             background-color: var(--secondary-text-color); color: white; border: none; padding: 10px 20px;
             font-size: 0.9rem; font-weight: bold; border-radius: 6px; cursor: pointer;
             margin-top: 1.5rem; float: right;
@@ -70,52 +70,115 @@
             <p>This Guest Wi-Fi Service (the "Service") is provided by <strong>[Provider Name]</strong> (the "Provider," "we," "us," or "our"). This Terms of Use Agreement (the "Agreement") governs your access to and use of the Service. By clicking "Accept & Connect" or by accessing or using the Service, you represent that you have read, understood, and agree to be bound by this Agreement.</p>
             
             <strong>1. Eligibility</strong>
-            <p>You represent and warrant that you are at least 18 years of age or the legal age of majority in your jurisdiction...</p>
+            <p>You represent and warrant that you are at least 18 years of age or the legal age of majority in your jurisdiction, and that you have the legal capacity to enter into this Agreement. If you are using the Service on behalf of an entity, you represent that you have the authority to bind that entity to this Agreement.</p>
 
             <strong>2. Modification of Terms</strong>
-            <p>We reserve the right to modify this Agreement at any time in our sole discretion...</p>
+            <p>We reserve the right to modify this Agreement at any time in our sole discretion. Any modifications will be effective immediately upon posting. Your continued use of the Service after such modifications constitutes your acceptance of the new terms.</p>
 
             <strong>3. Service Provided "AS IS"; No Warranties</strong>
             <p><strong>The Service is provided on an "AS IS" and "AS AVAILABLE" basis, without warranties of any kind, either express or implied. To the fullest extent permitted by applicable law, the Provider and its suppliers (including, without limitation, Arista) expressly disclaim all warranties, including, but not limited to, implied warranties of merchantability, fitness for a particular purpose, title, and non-infringement.</strong></p>
 
             <strong>4. Security and Your Risk</strong>
-            <p>This Service provides access to a public communications network. You acknowledge and agree that the Service is not inherently secure...</p>
+            <p>This Service provides access to a public communications network. You acknowledge and agree that the Service is not inherently secure. You are solely responsible for providing your own security measures (such as a personal firewall and virtual private network - VPN) to protect your data and device from viruses, malware, and other security risks. You assume all risk and responsibility for your activities while using the Service.</p>
 
             <strong>5. Acceptable Use Policy</strong>
             <p>You agree not to use the Service for any unlawful or prohibited purpose. Prohibited activities include, but are not limited to:</p>
             <ul>
                 <li>Violating any applicable local, state, federal, or international law or regulation.</li>
-                </ul>
+                <li>Infringing upon or violating our intellectual property rights or the intellectual property rights of others.</li>
+                <li>Harassing, abusing, stalking, threatening, defaming, or otherwise violating the legal rights of others.</li>
+                <li>Transmitting any material that is unlawful, obscene, defamatory, pornographic, indecent, or invasive of another's privacy.</li>
+                <li>Distributing viruses, Trojan horses, worms, or other malicious software.</li>
+                <li>Engaging in "hacking," vulnerability scanning, or any activity that disrupts or interferes with the Service or any other network or system.</li>
+                <li>Sending unsolicited advertising or promotional materials ("spam").</li>
+                <li>Reselling the Service or using it for any commercial purpose not expressly permitted.</li>
+            </ul>
 
             <strong>6. Monitoring and Content Filtering</strong>
-            <p>While we do not have an obligation to monitor your use of the Service, we reserve the right...</p>
+            <p>While we do not have an obligation to monitor your use of the Service, we reserve the right, in our sole discretion, to monitor, filter, block, or remove any content or activity that violates this Agreement or is otherwise objectionable.</p>
 
             <strong>7. Limitation of Liability</strong>
             <p><strong>To the maximum extent permitted by applicable law, in no event shall the Provider or its affiliates, directors, employees, agents, or suppliers (including, without limitation, Arista) be liable for any indirect, punitive, incidental, special, consequential, or exemplary damages, including without limitation damages for loss of profits, data, or other intangibles, arising out of or relating to the use of, or inability to use, the Service.</strong></p>
 
             <strong>8. Indemnification</strong>
-            <p>You agree to indemnify, defend, and hold harmless the Provider and its affiliates, directors, employees, agents, and suppliers (including, without limitation, Arista) from and against any and all claims...</p>
-            
+            <p>You agree to indemnify, defend, and hold harmless the Provider and its affiliates, directors, employees, agents, and suppliers (including, without limitation, Arista) from and against any and all claims, liabilities, damages, losses, costs, and expenses (including reasonable attorneys' fees) arising out of or in any way connected with your access to or use of the Service or your violation of this Agreement.</p>
+
+            <strong>9. Termination of Service</strong>
+            <p>We may, in our sole discretion, terminate or suspend your access to the Service at any time, for any reason or no reason, without prior notice.</p>
+
+            <strong>10. Privacy Policy</strong>
+            <p>By using the Service, you acknowledge that we may collect and use certain information, such as your device's MAC address and traffic data, for the purposes of providing and managing the network. For more information, please review our full Privacy Policy [Optional: insert link here].</p>
+
+            <strong>11. Governing Law and Jurisdiction</strong>
+            <p>This Agreement shall be governed by and construed in accordance with the laws of the State of [Insert State, e.g., California], without regard to its conflict of law principles. You agree to submit to the exclusive jurisdiction of the state and federal courts located in [Insert County and State, e.g., Santa Clara County, California] for the resolution of any disputes.</p>
+
             <strong>12. General Provisions</strong>
-            <p>This Agreement constitutes the entire agreement between you and the Provider regarding the Service...</p>
+            <p>This Agreement constitutes the entire agreement between you and the Provider regarding the Service. If any provision of this Agreement is found to be unenforceable, the remaining provisions will remain in full force and effect. Our failure to enforce any right or provision of this Agreement will not be considered a waiver of those rights.</p>
             
             <button id="close-modal-bottom" type="button" class="modal-footer-close">Close</button>
-            <div style="clear:both;"></div> </section>
+            <div style="clear:both;"></div>
+        </section>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            const sharedSecret = 'AristaPassword123!';
+
             const acceptBtn = document.getElementById('accept-btn');
             const termsLink = document.getElementById('terms-link');
             const termsModal = document.getElementById('terms-modal');
             const modalOverlay = document.getElementById('modal-overlay');
             const closeModalBtnTop = document.getElementById('close-modal-top');
-            // Reference to the new bottom close button
             const closeModalBtnBottom = document.getElementById('close-modal-bottom');
 
-            // --- The rest of the authentication script from the last working version goes here ---
-            // For brevity, it is omitted, but it must be included for the portal to function.
+            termsLink.focus();
 
-            // --- Modal Logic ---
+            const urlParams = new URLSearchParams(window.location.search);
+            const loginUrl = urlParams.get('login_url');
+            const challenge = urlParams.get('challenge');
+
+            function bufferToHex(buffer) {
+                return Array.from(new Uint8Array(buffer))
+                    .map(b => b.toString(16).padStart(2, '0'))
+                    .join('');
+            }
+
+            async function authenticate() {
+                try {
+                    const encoder = new TextEncoder();
+                    
+                    const secretData = encoder.encode(sharedSecret);
+                    const secretHash = await window.crypto.subtle.digest('SHA-1', secretData);
+                    const hmacKey = await window.crypto.subtle.importKey(
+                        'raw', secretHash, { name: 'HMAC', hash: 'SHA-1' }, false, ['sign']
+                    );
+
+                    const res = 'success';
+                    const messageString = `res=${res}&challenge=${challenge}`;
+                    const messageData = encoder.encode(messageString);
+
+                    const digestBuffer = await window.crypto.subtle.sign('HMAC', hmacKey, messageData);
+                    const digest = bufferToHex(digestBuffer);
+
+                    const finalUrl = new URL(loginUrl);
+                    finalUrl.searchParams.set('res', res);
+                    finalUrl.searchParams.set('challenge', challenge);
+                    finalUrl.searchParams.set('digest', digest);
+
+                    window.location.href = finalUrl.href;
+
+                } catch (error) {
+                    console.error('Authentication Error:', error);
+                    acceptBtn.textContent = 'Error!';
+                    acceptBtn.disabled = true;
+                }
+            }
+
+            if (loginUrl && challenge) {
+                acceptBtn.addEventListener('click', authenticate);
+            } else {
+                acceptBtn.textContent = 'Connect (Testing Mode)';
+            }
+
             const showModal = (event) => {
                 event.preventDefault();
                 termsModal.classList.remove('hidden');
@@ -130,9 +193,8 @@
 
             termsLink.addEventListener('click', showModal);
             closeModalBtnTop.addEventListener('click', hideModal);
-            modalOverlay.addEventListener('click', hideModal);
-            // Event listener for the new bottom close button
             closeModalBtnBottom.addEventListener('click', hideModal);
+            modalOverlay.addEventListener('click', hideModal);
         });
     </script>
 </body>
