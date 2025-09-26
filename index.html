@@ -35,7 +35,7 @@
         .accept-button:disabled { background-color: #999; cursor: not-allowed; }
         .hidden { display: none; }
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 100; }
-        .modal-content { position: fixed; top: 50%; left: 50%; transform: translate(--50%, -50%); background: white; padding: 1.5rem; border-radius: 8px; width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto; z-index: 101; text-align: left; }
+        .modal-content { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 1.5rem; border-radius: 8px; width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto; z-index: 101; text-align: left; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #dee2e6; padding-bottom: 1rem; margin-bottom: 1rem; }
         .modal-header h2 { margin: 0; font-size: 1.25rem; }
         .close-button { font-size: 1.5rem; font-weight: bold; border: none; background: none; cursor: pointer; color: #888; }
@@ -69,7 +69,6 @@
 
             const acceptBtn = document.getElementById('accept-btn');
             const termsLink = document.getElementById('terms-link');
-            // ... (rest of element getters)
             const termsModal = document.getElementById('terms-modal');
             const modalOverlay = document.getElementById('modal-overlay');
             const closeModalBtn = document.getElementById('close-modal');
@@ -79,8 +78,6 @@
             const urlParams = new URLSearchParams(window.location.search);
             const loginUrl = urlParams.get('login_url');
             const challenge = urlParams.get('challenge');
-            const clientMac = urlParams.get('client_mac') || urlParams.get('mac');
-            const userUrl = urlParams.get('userurl') || "https://www.google.com/";
 
             function bufferToHex(buffer) {
                 return Array.from(new Uint8Array(buffer))
@@ -100,41 +97,32 @@
                     );
 
                     // --- THE FIX IS HERE ---
-                    // Step 2: Concatenate the message parameters exactly as specified in the document.
+                    // Step 2: Create the message string EXACTLY as specified in the PHP example.
                     const res = 'success';
-                    const username = clientMac;
-                    const password = clientMac;
-                    const redirect = userUrl;
-                    const timeout = '1440'; // Defaulting to 24 hours in minutes as per the document example
-                    
-                    const messageString = res + challenge + username + password + redirect + timeout;
+                    const messageString = `res=${res}&challenge=${challenge}`;
                     const messageData = encoder.encode(messageString);
 
-                    // Step 3: Compute the HMAC-SHA1 digest of the full message string.
+                    // Step 3: Compute the HMAC-SHA1 digest of that specific string.
                     const digestBuffer = await window.crypto.subtle.sign('HMAC', hmacKey, messageData);
                     const digest = bufferToHex(digestBuffer);
 
-                    // Step 4: Construct the final redirect URL.
+                    // Step 4: Construct the final URL with ONLY the parameters from the syntax guide.
                     const finalUrl = new URL(loginUrl);
                     finalUrl.searchParams.set('res', res);
                     finalUrl.searchParams.set('challenge', challenge);
                     finalUrl.searchParams.set('digest', digest);
-                    finalUrl.searchParams.set('username', username);
-                    finalUrl.searchParams.set('password', password);
-                    finalUrl.searchParams.set('redirect', redirect);
-                    finalUrl.searchParams.set('session_timeout', timeout);
 
                     // Step 5: Redirect the browser.
                     window.location.href = finalUrl.href;
 
                 } catch (error) {
-                    console.error('Crypto Error:', error);
-                    acceptBtn.textContent = 'Crypto Error!';
+                    console.error('Authentication Error:', error);
+                    acceptBtn.textContent = 'Error!';
                     acceptBtn.disabled = true;
                 }
             }
 
-            if (loginUrl && challenge && clientMac) {
+            if (loginUrl && challenge) {
                 acceptBtn.addEventListener('click', authenticate);
             } else {
                 acceptBtn.textContent = 'Connect (Testing Mode)';
