@@ -138,6 +138,28 @@
             const urlParams = new URLSearchParams(window.location.search);
             const loginUrl = urlParams.get('login_url');
             const challenge = urlParams.get('challenge');
+            
+            // --- PERFORMANCE OPTIMIZATION ---
+            // A variable to hold the pre-calculated crypto key.
+            let hmacKey = null;
+            
+            // This new function prepares the key as soon as the page loads.
+            async function prepareCryptoKey() {
+                try {
+                    const encoder = new TextEncoder();
+                    const secretData = encoder.encode(sharedSecret);
+                    const secretHash = await window.crypto.subtle.digest('SHA-1', secretData);
+                    // Store the prepared key in the global variable for later use.
+                    hmacKey = await window.crypto.subtle.importKey(
+                        'raw', secretHash, { name: 'HMAC', hash: 'SHA-1' }, false, ['sign']
+                    );
+                } catch (error) {
+                    console.error('Crypto key preparation failed:', error);
+                    acceptBtn.textContent = 'Init Error!';
+                    acceptBtn.disabled = true;
+                }
+            }
+            // --- END OPTIMIZATION ---
 
             function bufferToHex(buffer) {
                 return Array.from(new Uint8Array(buffer))
@@ -147,18 +169,15 @@
 
             async function authenticate() {
                 try {
+                    if (!hmacKey) {
+                        throw new Error('HMAC key is not ready. The pre-calculation may have failed.');
+                    }
                     const encoder = new TextEncoder();
-                    
-                    const secretData = encoder.encode(sharedSecret);
-                    const secretHash = await window.crypto.subtle.digest('SHA-1', secretData);
-                    const hmacKey = await window.crypto.subtle.importKey(
-                        'raw', secretHash, { name: 'HMAC', hash: 'SHA-1' }, false, ['sign']
-                    );
-
                     const res = 'success';
                     const messageString = `res=${res}&challenge=${challenge}`;
                     const messageData = encoder.encode(messageString);
 
+                    // This step is now faster as it uses the pre-calculated key.
                     const digestBuffer = await window.crypto.subtle.sign('HMAC', hmacKey, messageData);
                     const digest = bufferToHex(digestBuffer);
 
@@ -177,7 +196,10 @@
             }
 
             if (loginUrl && challenge) {
+                // Start preparing the key in the background as soon as the page loads.
+                prepareCryptoKey();
                 acceptBtn.addEventListener('click', authenticate);
+
             } else {
                 acceptBtn.textContent = 'Connect (Testing Mode)';
             }
