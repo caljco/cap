@@ -112,8 +112,86 @@
             </section>
     </div>
     <script>
-        // The JavaScript for this page goes here.
-        // It has been omitted for brevity but should be the last working version.
+        document.addEventListener('DOMContentLoaded', () => {
+            const sharedSecret = 'AristaPassword123!';
+
+            const acceptBtn = document.getElementById('accept-btn');
+            const termsLink = document.getElementById('terms-link');
+            const termsModal = document.getElementById('terms-modal');
+            const modalOverlay = document.getElementById('modal-overlay');
+            const closeModalBtn = document.getElementById('close-modal');
+
+            termsLink.focus();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const loginUrl = urlParams.get('login_url');
+            const challenge = urlParams.get('challenge');
+
+            function bufferToHex(buffer) {
+                return Array.from(new Uint8Array(buffer))
+                    .map(b => b.toString(16).padStart(2, '0'))
+                    .join('');
+            }
+
+            async function authenticate() {
+                try {
+                    const encoder = new TextEncoder();
+                    
+                    // Step 1: Create the HMAC key by SHA1-hashing the shared secret.
+                    const secretData = encoder.encode(sharedSecret);
+                    const secretHash = await window.crypto.subtle.digest('SHA-1', secretData);
+                    const hmacKey = await window.crypto.subtle.importKey(
+                        'raw', secretHash, { name: 'HMAC', hash: 'SHA-1' }, false, ['sign']
+                    );
+
+                    // Step 2: Create the message string EXACTLY as specified in the PHP example.
+                    const res = 'success';
+                    const messageString = `res=${res}&challenge=${challenge}`;
+                    const messageData = encoder.encode(messageString);
+
+                    // Step 3: Compute the HMAC-SHA1 digest of that specific string.
+                    const digestBuffer = await window.crypto.subtle.sign('HMAC', hmacKey, messageData);
+                    const digest = bufferToHex(digestBuffer);
+
+                    // Step 4: Construct the final URL with ONLY the parameters from the syntax guide.
+                    const finalUrl = new URL(loginUrl);
+                    finalUrl.searchParams.set('res', res);
+                    finalUrl.searchParams.set('challenge', challenge);
+                    finalUrl.searchParams.set('digest', digest);
+
+                    // Step 5: Redirect the browser.
+                    window.location.href = finalUrl.href;
+
+                } catch (error) {
+                    console.error('Authentication Error:', error);
+                    acceptBtn.textContent = 'Error!';
+                    acceptBtn.disabled = true;
+                }
+            }
+
+            if (loginUrl && challenge) {
+                acceptBtn.addEventListener('click', authenticate);
+            } else {
+                acceptBtn.textContent = 'Connect (Testing Mode)';
+            }
+
+            // --- Modal Logic ---
+            const showModal = (event) => {
+                event.preventDefault();
+                termsModal.classList.remove('hidden');
+                modalOverlay.classList.remove('hidden');
+                closeModalBtn.focus();
+            };
+            const hideModal = () => {
+                termsModal.classList.add('hidden');
+                modalOverlay.classList.add('hidden');
+                termsLink.focus();
+            };
+
+            termsLink.addEventListener('click', showModal);
+            closeModalBtn.addEventListener('click', hideModal);
+            modalOverlay.addEventListener('click', hideModal);
+        });
     </script>
 </body>
 </html>
