@@ -25,8 +25,6 @@
         }
         h1 { color: var(--primary-text-color); margin: 0 0 0.5rem 0; font-size: 1.75rem; }
         p { color: var(--secondary-text-color); margin: 0 0 1.5rem 0; line-height: 1.5; }
-        #p.terms-agreement { margin-bottom: 0.5rem; }
-        #p.terms-link-container { margin-top: 0; }
         p a { color: var(--primary-color); font-weight: 500; text-decoration: none; cursor: pointer; }
         p a:hover { text-decoration: underline; }
         .accept-button {
@@ -48,13 +46,26 @@
             font-size: 0.9rem; font-weight: bold; border-radius: 6px; cursor: pointer;
             margin-top: 1.5rem; float: right;
         }
+        .page-header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
         .page-footer {
             margin-top: 2rem;
             text-align: center;
         }
+        .page-header img,
+        .page-footer img {
+            max-width: 100%;
+            height: auto;
+        }
     </style>
 </head>
 <body>
+    <header class="page-header">
+        #<img src="data:image/png;base64,[PROVIDER_BASE64_LOGO]" alt="[PROVIDER] Logo">
+    </header>
+    
     <main class="portal-container">
         <h1>Guest Wi-Fi</h1>
         <p>By clicking "Accept & Connect", you agree to our <a id="terms-link" href="#" aria-haspopup="dialog"><strong>Terms of Use</strong></a></p>
