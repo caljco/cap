@@ -203,7 +203,10 @@
                 acceptBtn.addEventListener('click', authenticate);
 
             } else {
-                acceptBtn.textContent = 'Connect (Testing Mode)';
+                acceptBtn.textContent = 'Accept & Connect 🤖 Testing Mode';
+                acceptBtn.addEventListener('click', () => {
+                    window.location.href = 'https://www.google.com/';
+                });
             }
 
             const showModal = (event) => {
