@@ -25,8 +25,8 @@
         }
         h1 { color: var(--primary-text-color); margin: 0 0 0.5rem 0; font-size: 1.75rem; }
         p { color: var(--secondary-text-color); margin: 0 0 1.5rem 0; line-height: 1.5; }
-        p.terms-agreement { margin-bottom: 0.5rem; }
-        p.terms-link-container { margin-top: 0; }
+        #p.terms-agreement { margin-bottom: 0.5rem; }
+        #p.terms-link-container { margin-top: 0; }
         p a { color: var(--primary-color); font-weight: 500; text-decoration: none; cursor: pointer; }
         p a:hover { text-decoration: underline; }
         .accept-button {
@@ -56,10 +56,8 @@
 </head>
 <body>
     <main class="portal-container">
-        <h1>[PROVIDER NAME]</h1>
-        <h2>Guest Wi-Fi</h2>
-        <p class="terms-agreement">By clicking "Accept & Connect", you agree to our</p>
-        <p class="terms-link-container"><a id="terms-link" href="#" aria-haspopup="dialog"><strong>Terms of Use</strong></a></p>
+        <h1>Guest Wi-Fi</h1>
+        <p>By clicking "Accept & Connect", you agree to our <a id="terms-link" href="#" aria-haspopup="dialog"><strong>Terms of Use</strong></a></p>
         
         <form id="auth-form" onsubmit="return false;">
             <button id="accept-btn" type="button" class="accept-button">Accept & Connect</button>
