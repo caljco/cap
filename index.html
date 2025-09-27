@@ -62,9 +62,11 @@
     </style>
 </head>
 <body>
+    <!-- Optional Logo in header
     <header class="page-header">
-        #<img src="data:image/png;base64,[PROVIDER_BASE64_LOGO]" alt="[PROVIDER] Logo">
+        <img src="data:image/png;base64,[PROVIDER_BASE64_LOGO]" alt="[PROVIDER] Logo">
     </header>
+    -->
     
     <main class="portal-container">
         <h1>Guest Wi-Fi</h1>
@@ -142,9 +144,9 @@
         </section>
     </div>
     <script>
+        <!-- For environments other than an open guest network, a server-side portal is necessary; i.e. NOT THIS -->
         document.addEventListener('DOMContentLoaded', () => {
             const sharedSecret = 'OPEN_GUEST';
-
             const acceptBtn = document.getElementById('accept-btn');
             const termsLink = document.getElementById('terms-link');
             const termsModal = document.getElementById('terms-modal');
