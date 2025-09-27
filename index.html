@@ -16,7 +16,7 @@
         body {
             font-family: system-ui, sans-serif;
             background-color: var(--background-color); margin: 0; display: flex;
-            flex-direction: column; /* Allow main and footer to stack */
+            flex-direction: column;
             justify-content: center; align-items: center; min-height: 100vh;
         }
         .portal-container {
@@ -57,7 +57,8 @@
 <body>
     <main class="portal-container">
         <h1>Guest Wi-Fi</h1>
-        <p class="terms-agreement">By clicking "Accept & Connect", you agree to our</p>
+        <p class="terms-agreement">By clicking "Accept & Connect",</p>
+        <p class="terms-agreement">you agree to our</p>
         <p class="terms-link-container"><a id="terms-link" href="#" aria-haspopup="dialog"><strong>Terms of Use</strong></a></p>
         
         <form id="auth-form" onsubmit="return false;">
