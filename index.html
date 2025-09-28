@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guest Wi-Fi</title>
+    <link rel="icon" type="image/x-icon" href="data:,">
     <style>
         :root {
             --background-color: #f0f2f5;
@@ -12,53 +13,107 @@
             --primary-text-color: #333;
             --secondary-text-color: #6c757d;
         }
-        html { font-size: 16px; }
+        html {
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        *,
+        *:before,
+        *:after {
+            box-sizing: inherit;
+        }
         body {
             font-family: system-ui, sans-serif;
-            background-color: var(--background-color); margin: 0; display: flex;
+            background-color: var(--background-color);
+            margin: 0;
+            display: flex;
             flex-direction: column;
-            justify-content: center; align-items: center; min-height: 100vh;
-        }
-        .portal-container {
-            background-color: var(--portal-background); padding: 2rem; border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center; max-width: 400px; width: 90%;
-        }
-        h1 { color: var(--primary-text-color); margin: 0 0 0.5rem 0; font-size: 1.75rem; }
-        p { color: var(--secondary-text-color); margin: 0 0 1.5rem 0; line-height: 1.5; }
-        p a { color: var(--primary-color); font-weight: 500; text-decoration: none; cursor: pointer; }
-        p a:hover { text-decoration: underline; }
-        .accept-button {
-            background-color: var(--primary-color); color: white; border: none; padding: 12px 20px;
-            font-size: 1rem; font-weight: bold; border-radius: 6px; cursor: pointer;
-            width: 100%; margin-top: 1.5rem; transition: background-color 0.2s;
-        }
-        .accept-button:hover:not(:disabled) { background-color: #0056b3; }
-        .accept-button:disabled { background-color: #999; cursor: not-allowed; }
-        .hidden { display: none; }
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 100; }
-        .modal-content { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 1.5rem; border-radius: 8px; width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto; z-index: 101; text-align: left; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #dee2e6; padding-bottom: 1rem; margin-bottom: 1rem; }
-        .modal-header h2 { margin: 0; font-size: 1.25rem; }
-        .close-button { font-size: 1.5rem; font-weight: bold; border: none; background: none; cursor: pointer; color: #888; }
-        .modal-body { font-size: 0.9rem; line-height: 1.6; color: var(--secondary-text-color); }
-        .modal-footer-close {
-            background-color: var(--secondary-text-color); color: white; border: none; padding: 10px 20px;
-            font-size: 0.9rem; font-weight: bold; border-radius: 6px; cursor: pointer;
-            margin-top: 1.5rem; float: right;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
         .page-header {
             margin-bottom: 2rem;
             text-align: center;
         }
+        .page-header img,
+        .page-footer img {
+            max-width: 95%;
+            height: auto;
+        }
         .page-footer {
             margin-top: 2rem;
             text-align: center;
         }
-        .page-header img,
-        .page-footer img {
-            max-width: 100%;
-            height: auto;
+        .portal-container {
+            background-color: var(--portal-background);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
         }
+        h1 {
+            color: var(--primary-text-color);
+            margin: 0 0 0.5rem 0;
+            font-size: 1.75rem;
+        }
+        p {
+            color: var(--secondary-text-color);
+            margin: 0 0 1.5rem 0;
+            line-height: 1.5;
+        }
+        p a {
+            color: var(--primary-color);
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        p a:hover {
+            text-decoration: underline;
+        }
+        .button {
+            border: none;
+            color: white;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .accept-button {
+            background-color: var(--primary-color);
+            padding: 12px 20px;
+            font-size: 1rem;
+            width: 100%;
+            margin-top: 1.5rem;
+            transition: background-color 0.2s;
+        }
+        .accept-button:hover:not(:disabled) {
+            background-color: #0056b3;
+        }
+        .accept-button:disabled {
+            background-color: #999;
+            cursor: not-allowed;
+        }
+        .modal-header-close {
+            font-size: 1.5rem;
+            background: none;
+            color: #888;
+        }
+        .modal-footer-close {
+            background-color: var(--secondary-text-color);
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            border-radius: 6px;
+            margin-top: 1.5rem;
+            float: center;
+        }
+        .hidden { display: none; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 100; }
+        .modal-content { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 1.5rem; border-radius: 8px; width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto; z-index: 101; text-align: left; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #dee2e6; padding-bottom: 1rem; margin-bottom: 1rem; }
+        .modal-header h2 { margin: 0; font-size: 1.25rem; }
+        .modal-body { font-size: 0.9rem; line-height: 1.6; color: var(--secondary-text-color); }
     </style>
 </head>
 <body>
@@ -86,7 +141,7 @@
     <div id="terms-modal" class="modal-content hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
         <header class="modal-header">
             <h2 id="modal-title">Guest Wi-Fi Terms of Use</h2>
-            <button id="close-modal-top" class="close-button" aria-label="Close">&times;</button>
+            <button id="close-modal-top" type="button" class="modal-header-close" aria-label="Close">&times;</button>
         </header>
         <section class="modal-body">
             <p><strong>Important Notice: This Wi-Fi Service is provided by the property owner or operator ("Provider"). Arista Networks, Inc. ("Arista") is solely the provider of the underlying technology and is not the Provider of the Service. The Provider is solely responsible for this Service and for compliance with all applicable laws and regulations.</strong></p>
@@ -144,7 +199,7 @@
         </section>
     </div>
     <script>
-        <!-- For environments other than an open guest network, a server-side portal is necessary; i.e. NOT THIS -->
+        <!-- Server-side portal is necessary for closed, private environments; i.e. NOT THIS -->
         document.addEventListener('DOMContentLoaded', () => {
             const sharedSecret = 'OPEN_GUEST';
             const acceptBtn = document.getElementById('accept-btn');
