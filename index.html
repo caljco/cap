@@ -73,11 +73,14 @@
         p a:hover {
             text-decoration: underline;
         }
-        .button {
+        .accept-button,
+        .modal-footer-close,
+        .modal-header-close {
             border: none;
             font-weight: bold;
             border-radius: 6px;
             cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
         }
         .accept-button {
             background-color: var(--primary-color);
@@ -86,7 +89,6 @@
             font-size: 1rem;
             width: 100%;
             margin-top: 1.5rem;
-            transition: background-color 0.2s;
         }
         .accept-button:hover:not(:disabled) {
             background-color: #0056b3;
@@ -99,6 +101,8 @@
             font-size: 1.5rem;
             background: none;
             color: #888;
+            padding: 0.25rem 0.5rem;
+            border-radius: 50%;
         }
         .modal-footer-close {
             background-color: var(--secondary-text-color);
@@ -106,6 +110,10 @@
             padding: 10px 20px;
             font-size: 0.9rem;
             margin: 1.5rem auto 0 auto;
+        }
+        .modal-header-close:hover {
+            background-color: #eee;
+            color: #333;
         }
         .hidden { display: none; }
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 100; }
@@ -116,6 +124,7 @@
     </style>
 </head>
 <body>
+    
     <!-- Optional Logo in header
     <header class="page-header">
         <img src="data:image/png;base64,[PROVIDER_BASE64_LOGO]" alt="[PROVIDER] Logo">
@@ -129,7 +138,6 @@
         <form id="auth-form" onsubmit="return false;">
             <button id="accept-btn" type="button" class="accept-button">Accept & Connect</button>
         </form>
-
     </main>
 
     <footer class="page-footer">
@@ -197,8 +205,8 @@
             <div style="clear:both;"></div>
         </section>
     </div>
+    <!-- A server-side portal is necessary for closed, private environments; i.e. NOT THIS -->
     <script>
-        <!-- Server-side portal is necessary for closed, private environments; i.e. NOT THIS -->
         document.addEventListener('DOMContentLoaded', () => {
             const sharedSecret = 'OPEN_GUEST';
             const acceptBtn = document.getElementById('accept-btn');
