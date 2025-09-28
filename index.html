@@ -1,305 +1,295 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guest Wi-Fi</title>
-    <link rel="icon" type="image/x-icon" href="data:,">
-    <style>
-        :root {
-            --background-color: #f0f2f5;
-            --portal-background: #ffffff;
-            --primary-color: #007bff;
-            --primary-text-color: #333;
-            --secondary-text-color: #6c757d;
-        }
-        html {
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-        *,
-        *:before,
-        *:after {
-            box-sizing: inherit;
-        }
-        body {
-            font-family: system-ui, sans-serif;
-            background-color: var(--background-color);
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-        .page-header {
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-        .page-header img,
-        .page-footer img {
-            max-width: 95%;
-            height: auto;
-        }
-        .page-footer {
-            margin-top: 2rem;
-            text-align: center;
-        }
-        .portal-container {
-            background-color: var(--portal-background);
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
-        }
-        h1 {
-            color: var(--primary-text-color);
-            margin: 0 0 0.5rem 0;
-            font-size: 1.75rem;
-        }
-        p {
-            color: var(--secondary-text-color);
-            margin: 0 0 1.5rem 0;
-            line-height: 1.5;
-        }
-        p a {
-            color: var(--primary-color);
-            font-weight: 500;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        p a:hover {
-            text-decoration: underline;
-        }
-        .accept-button,
-        .modal-footer-close,
-        .modal-header-close {
-            border: none;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.2s, color 0.2s;
-        }
-        .accept-button {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 12px 20px;
-            font-size: 1rem;
-            width: 100%;
-            margin-top: 1.5rem;
-        }
-        .accept-button:hover:not(:disabled) {
-            background-color: #0056b3;
-        }
-        .accept-button:disabled {
-            background-color: #999;
-            cursor: not-allowed;
-        }
-        .modal-header-close {
-            font-size: 1.5rem;
-            background: none;
-            color: #888;
-            padding: 0.25rem 0.5rem;
-            border-radius: 50%;
-        }
-        .modal-footer-close {
-            background-color: var(--secondary-text-color);
-            color: white;
-            padding: 10px 20px;
-            font-size: 0.9rem;
-            margin: 1.5rem auto 0 auto;
-        }
-        .modal-header-close:hover {
-            background-color: #eee;
-            color: #333;
-        }
-        .hidden { display: none; }
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 100; }
-        .modal-content { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 1.5rem; border-radius: 8px; width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto; z-index: 101; text-align: left; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #dee2e6; padding-bottom: 1rem; margin-bottom: 1rem; }
-        .modal-header h2 { margin: 0; font-size: 1.25rem; }
-        .modal-body { font-size: 0.9rem; line-height: 1.6; color: var(--secondary-text-color); }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guest Wi-Fi</title>
+  <link rel="icon" type="image/x-icon" href="data:,">
+  <style>
+    :root {
+      --background-color: #f0f2f5;
+      --portal-background: #ffffff;
+      --primary-color: #007bff;
+      --primary-text-color: #333;
+      --secondary-text-color: #6c757d;
+    }
+    html {
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    *, *:before, *:after { box-sizing: inherit; }
+    body {
+      font-family: system-ui, sans-serif;
+      background-color: var(--background-color);
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .page-header {
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    .page-header img,
+    .page-footer img {
+      max-width: 95%;
+      height: auto;
+    }
+    .page-footer {
+      margin-top: 2rem;
+      text-align: center;
+    }
+    .portal-container {
+      background-color: var(--portal-background);
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+    }
+    h1 {
+      color: var(--primary-text-color);
+      margin: 0 0 0.5rem 0;
+      font-size: 1.75rem;
+    }
+    p {
+      color: var(--secondary-text-color);
+      margin: 0 0 1.5rem 0;
+      line-height: 1.5;
+    }
+    p a {
+      color: var(--primary-color);
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    p a:hover {
+      text-decoration: underline;
+    }
+    .accept-button,
+    .modal-footer-close,
+    .modal-header-close {
+      border: none;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s, color 0.2s;
+    }
+    .accept-button {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 12px 20px;
+      font-size: 1rem;
+      width: 100%;
+      margin-top: 1.5rem;
+    }
+    .accept-button:hover:not(:disabled) {
+      background-color: #0056b3;
+    }
+    .accept-button:disabled {
+      background-color: #999;
+      cursor: not-allowed;
+    }
+    .modal-header-close {
+      font-size: 1.5rem;
+      background: none;
+      color: #888;
+    }
+    .modal-footer-close {
+      background-color: var(--secondary-text-color);
+      color: white;
+      padding: 10px 20px;
+      font-size: 0.9rem;
+      margin: 1.5rem auto 0 auto;
+    }
+    .hidden { display: none; }
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 100; }
+    .modal-content { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 1.5rem; border-radius: 8px; width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto; z-index: 101; text-align: left; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #dee2e6; padding-bottom: 1rem; margin-bottom: 1rem; }
+    .modal-header h2 { margin: 0; font-size: 1.25rem; }
+    .modal-body { font-size: 0.9rem; line-height: 1.6; color: var(--secondary-text-color); }
+  </style>
 </head>
 <body>
+  
+  <!-- Optional Logo in header
+  <header class="page-header">
+    <img src="data:image/png;base64,[PROVIDER_BASE64_LOGO]" alt="[PROVIDER] Logo">
+  </header>
+  -->
+  
+  <main class="portal-container">
+    <h1>Guest Wi-Fi</h1>
+    <p>By clicking "Accept & Connect", you agree to our <a id="terms-link" href="#" aria-haspopup="dialog"><strong>Terms of Use</strong></a></p>
     
-    <!-- Optional Logo in header
-    <header class="page-header">
-        <img src="data:image/png;base64,[PROVIDER_BASE64_LOGO]" alt="[PROVIDER] Logo">
+    <form id="auth-form" onsubmit="return false;">
+      <button id="accept-btn" type="button" class="accept-button">Accept & Connect</button>
+    </form>
+  </main>
+
+  <footer class="page-footer">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAASCAYAAAAdZl26AAAABHNCSVQICAgIfAhkiAAAAF96VFh0UmF3IHByb2ZpbGUgdHlwZSBBUFAxAAAImeNKT81LLcpMVigoyk/LzEnlUgADYxMuE0sTS6NEAwMDCwMIMDQwMDYEkkZAtjlUKNEABZiYm6UBoblZspkpiM8FAE+6FWgbLdiMAAAEuklEQVRIie1VW2xUVRRde987Q522GgJDSbFKJYA0JqDV8Cid0yFgmWmN8oHxg5AmfhgTIkljUD/0w6hRCQb/CloSNL5CEB+dGaCQubcTn6QVfgoJgQryaAuBptBSO/fu7UdpmRngAyTpDys5ybnn7r32Wudp4TqMiT1XWTl/aUXF3GfKy6cdPXPmjId7hOXLYy9UVs4ZOXXqxEBtbbzp9Onjh+8Vtz3eEeE5mUxi64oVDbNUpzZEo7HzAOYQ8cFs1ivLZPZ1GRNb4rqp342JL/I8vmTbYpipW0T6mPkpEekiosVEsKZPL97d13ftMWZdRuSViWBCdG1twzJA56nSj5alj7pu8rAx8UWum7xjY5z7EY3G1ovIS6p8EaBZ6XTqSxGsY7ZrYrHYFADvGGOKAFoaDOo6YOhnVawk0vmqGgColsg/ls3icH//0Iuq+rzjJHaKYEpuHSJPS0r0G8vymwCJGmNsEX/JHU9/oYF0OvWF46S2BIOiItQNQH1fhgD5bXhYNonweyJFbzLjTxE87PuhOiLtISJLFScAmSlizwO0CsBRZgwBgIjdk28gcDyVSv0rQllm6gKK3gI08b8M2DYGx/siw78A/qpoNLbesui866Y6Aa7IZBK/WpY1K51OdDKrY1lUqqoVIhj0fR0FdA+RllsWwsxkMcMf40A1wB4AqOpVwF9TV7f6ZdtGdzqdcgE7nMns/+duDEw6IpH4AmPiqyZbx12jqmptEABNto5Jw03Oq6urA6WlZQeIoCJDK13XnXgPjIlvZaaNhTmqOqCK74ChDUDxE8z0l4g+CaCXCF8DMESUd2GI6Keex58Eg9IF0LSbpempdDo52xhjExWnAeIrV3rrOjs7s7lRdmFaaWnZJoCqVFWZQ80APi4IOSviLc8XY8+wbXyvWtw+dhtdnx1CM4CHPA8LLMsbzacZ6c1mQ0HblqcBgNl+FsA2z/MXMuvg+KFnDjWr0kIiPTemDe/f1oAxjY8TydsiaCJSBWhnJNK4p6Oj7XjOzHgXLjx4LhzuD02MaAkD6gFalLuoRLBUActiBvxc8Rdd1x0BMAKM3X7GxPqZGczXTruuOwAAkUjjXEDeVZXXfZ+7LEsPGtO423Xbjo0z5S4rE2mrKk4C6FXlPlUcYtZWFGy1cLg/xFy8l7nkMnPJ5UAAJ1RxPhDwfshfGWwGaJBIupntnhut5EpdXXyXMeamHZADYtZWVfQzo5sZQSLaT6StubonOtFofAMRFhOhnFl/INLNRNoEYFE0Gn81l9l13YHBQV4hogdVMSoiaxwnuay9vX0oPy7Z6ziJ6MjIpWKRq1PHm+f5C4mwiugBczv112suJoIAtINItxDpa4DOjUbjG8bjbAAwpn42gA9U9RXHSbbmEhnT8AZAH9XUNLYBMjHe2dk2XFW1Nj5jxvC3RPxZJLL6bEfH3kOFQoyJzwT8otwxZi4DYIvceDxzUVPT+IiqfqgqGx0n1VKgp5lIW4yp/8l19/3NAEBkbVelQ46T3FFI5rqJFkCPBALSUvivu3vXaDgcWgtoGzMfiETql+YXq59NhJP528fuIaI2EXx+K8MAMFZLj7huatst9HwF4A8ia/utcu/jPu4Q/wHClzAYL0/wugAAAABJRU5ErkJggg==" alt="Powered by ARISTA">
+  </footer>
+  
+  <div id="modal-overlay" class="modal-overlay hidden"></div>
+  <div id="terms-modal" class="modal-content hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <header class="modal-header">
+      <h2 id="modal-title">Guest Wi-Fi Terms of Use</h2>
+      <button id="close-modal-top" type="button" class="modal-header-close" aria-label="Close">&times;</button>
     </header>
-    -->
-    
-    <main class="portal-container">
-        <h1>Guest Wi-Fi</h1>
-        <p>By clicking "Accept & Connect", you agree to our <a id="terms-link" href="#" aria-haspopup="dialog"><strong>Terms of Use</strong></a></p>
-        
-        <form id="auth-form" onsubmit="return false;">
-            <button id="accept-btn" type="button" class="accept-button">Accept & Connect</button>
-        </form>
-    </main>
+    <section class="modal-body">
+      <p><strong>Important Notice: This Wi-Fi Service is provided by the property owner or operator ("Provider"). Arista Networks, Inc. ("Arista") is solely the provider of the underlying technology and is not the Provider of the Service. The Provider is solely responsible for this Service and for compliance with all applicable laws and regulations.</strong></p>
+      <hr>
+      <p>This Guest Wi-Fi Service (the "Service") is provided by <strong>[PROVIDER NAME]</strong> (the "Provider," "we," "us," or "our"). This Terms of Use Agreement (the "Agreement") governs your access to and use of the Service. By clicking "Accept & Connect" or by accessing or using the Service, you represent that you have read, understood, and agree to be bound by this Agreement.</p>
+      
+      <strong>1. Eligibility</strong>
+      <p>You represent and warrant that you are at least 18 years of age or the legal age of majority in your jurisdiction, and that you have the legal capacity to enter into this Agreement. If you are using the Service on behalf of an entity, you represent that you have the authority to bind that entity to this Agreement.</p>
 
-    <footer class="page-footer">
-        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAASCAYAAAAdZl26AAAABHNCSVQICAgIfAhkiAAAAF96VFh0UmF3IHByb2ZpbGUgdHlwZSBBUFAxAAAImeNKT81LLcpMVigoyk/LzEnlUgADYxMuE0sTS6NEAwMDCwMIMDQwMDYEkkZAtjlUKNEABZiYm6UBoblZspkpiM8FAE+6FWgbLdiMAAAEuklEQVRIie1VW2xUVRRde987Q522GgJDSbFKJYA0JqDV8Cid0yFgmWmN8oHxg5AmfhgTIkljUD/0w6hRCQb/CloSNL5CEB+dGaCQubcTn6QVfgoJgQryaAuBptBSO/fu7UdpmRngAyTpDys5ybnn7r32Wudp4TqMiT1XWTl/aUXF3GfKy6cdPXPmjId7hOXLYy9UVs4ZOXXqxEBtbbzp9Onjh+8Vtz3eEeE5mUxi64oVDbNUpzZEo7HzAOYQ8cFs1ivLZPZ1GRNb4rqp342JL/I8vmTbYpipW0T6mPkpEekiosVEsKZPL97d13ftMWZdRuSViWBCdG1twzJA56nSj5alj7pu8rAx8UWum7xjY5z7EY3G1ovIS6p8EaBZ6XTqSxGsY7ZrYrHYFADvGGOKAFoaDOo6YOhnVawk0vmqGgColsg/ls3icH//0Iuq+rzjJHaKYEpuHSJPS0r0G8vymwCJGmNsEX/JHU9/oYF0OvWF46S2BIOiItQNQH1fhgD5bXhYNonweyJFbzLjTxE87PuhOiLtISJLFScAmSlizwO0CsBRZgwBgIjdk28gcDyVSv0rQllm6gKK3gI08b8M2DYGx/siw78A/qpoNLbesui866Y6Aa7IZBK/WpY1K51OdDKrY1lUqqoVIhj0fR0FdA+RllsWwsxkMcMf40A1wB4AqOpVwF9TV7f6ZdtGdzqdcgE7nMns/+duDEw6IpH4AmPiqyZbx12jqmptEABNto5Jw03Oq6urA6WlZQeIoCJDK13XnXgPjIlvZaaNhTmqOqCK74ChDUDxE8z0l4g+CaCXCF8DMESUd2GI6Keex58Eg9IF0LSbpempdDo52xhjExWnAeIrV3rrOjs7s7lRdmFaaWnZJoCqVFWZQ80APi4IOSviLc8XY8+wbXyvWtw+dhtdnx1CM4CHPA8LLMsbzacZ6c1mQ0HblqcBgNl+FsA2z/MXMuvg+KFnDjWr0kIiPTemDe/f1oAxjY8TydsiaCJSBWhnJNK4p6Oj7XjOzHgXLjx4LhzuD02MaAkD6gFalLuoRLBUActiBvxc8Rdd1x0BMAKM3X7GxPqZGczXTruuOwAAkUjjXEDeVZXXfZ+7LEsPGtO423Xbjo0z5S4rE2mrKk4C6FXlPlUcYtZWFGy1cLg/xFy8l7nkMnPJ5UAAJ1RxPhDwfshfGWwGaJBIupntnhut5EpdXXyXMeamHZADYtZWVfQzo5sZQSLaT6StubonOtFofAMRFhOhnFl/INLNRNoEYFE0Gn81l9l13YHBQV4hogdVMSoiaxwnuay9vX0oPy7Z6ziJ6MjIpWKRq1PHm+f5C4mwiugBczv112suJoIAtINItxDpa4DOjUbjG8bjbAAwpn42gA9U9RXHSbbmEhnT8AZAH9XUNLYBMjHe2dk2XFW1Nj5jxvC3RPxZJLL6bEfH3kOFQoyJzwT8otwxZi4DYIvceDxzUVPT+IiqfqgqGx0n1VKgp5lIW4yp/8l19/3NAEBkbVelQ46T3FFI5rqJFkCPBALSUvivu3vXaDgcWgtoGzMfiETql+YXq59NhJP528fuIaI2EXx+K8MAMFZLj7huatst9HwF4A8ia/utcu/jPu4Q/wHClzAYL0/wugAAAABJRU5ErkJggg==" alt="Powered by ARISTA">
-    </footer>
-    
-    <div id="modal-overlay" class="modal-overlay hidden"></div>
-    <div id="terms-modal" class="modal-content hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-        <header class="modal-header">
-            <h2 id="modal-title">Guest Wi-Fi Terms of Use</h2>
-            <button id="close-modal-top" type="button" class="modal-header-close" aria-label="Close">&times;</button>
-        </header>
-        <section class="modal-body">
-            <p><strong>Important Notice: This Wi-Fi Service is provided by the property owner or operator ("Provider"). Arista Networks, Inc. ("Arista") is solely the provider of the underlying technology and is not the Provider of the Service. The Provider is solely responsible for this Service and for compliance with all applicable laws and regulations.</strong></p>
-            <hr>
-            <p>This Guest Wi-Fi Service (the "Service") is provided by <strong>[PROVIDER NAME]</strong> (the "Provider," "we," "us," or "our"). This Terms of Use Agreement (the "Agreement") governs your access to and use of the Service. By clicking "Accept & Connect" or by accessing or using the Service, you represent that you have read, understood, and agree to be bound by this Agreement.</p>
-            
-            <strong>1. Eligibility</strong>
-            <p>You represent and warrant that you are at least 18 years of age or the legal age of majority in your jurisdiction, and that you have the legal capacity to enter into this Agreement. If you are using the Service on behalf of an entity, you represent that you have the authority to bind that entity to this Agreement.</p>
+      <strong>2. Modification of Terms</strong>
+      <p>We reserve the right to modify this Agreement at any time in our sole discretion. Any modifications will be effective immediately upon posting. Your continued use of the Service after such modifications constitutes your acceptance of the new terms.</p>
 
-            <strong>2. Modification of Terms</strong>
-            <p>We reserve the right to modify this Agreement at any time in our sole discretion. Any modifications will be effective immediately upon posting. Your continued use of the Service after such modifications constitutes your acceptance of the new terms.</p>
+      <strong>3. Service Provided "AS IS"; No Warranties</strong>
+      <p><strong>The Service is provided on an "AS IS" and "AS AVAILABLE" basis, without warranties of any kind, either express or implied. To the fullest extent permitted by applicable law, the Provider and its suppliers (including, without limitation, Arista) expressly disclaim all warranties, including, but not limited to, implied warranties of merchantability, fitness for a particular purpose, title, and non-infringement.</strong></p>
 
-            <strong>3. Service Provided "AS IS"; No Warranties</strong>
-            <p><strong>The Service is provided on an "AS IS" and "AS AVAILABLE" basis, without warranties of any kind, either express or implied. To the fullest extent permitted by applicable law, the Provider and its suppliers (including, without limitation, Arista) expressly disclaim all warranties, including, but not limited to, implied warranties of merchantability, fitness for a particular purpose, title, and non-infringement.</strong></p>
+      <strong>4. Security and Your Risk</strong>
+      <p>This Service provides access to a public communications network. You acknowledge and agree that the Service is not inherently secure. You are solely responsible for providing your own security measures (such as a personal firewall and virtual private network - VPN) to protect your data and device from viruses, malware, and other security risks. You assume all risk and responsibility for your activities while using the Service.</p>
 
-            <strong>4. Security and Your Risk</strong>
-            <p>This Service provides access to a public communications network. You acknowledge and agree that the Service is not inherently secure. You are solely responsible for providing your own security measures (such as a personal firewall and virtual private network - VPN) to protect your data and device from viruses, malware, and other security risks. You assume all risk and responsibility for your activities while using the Service.</p>
+      <strong>5. Acceptable Use Policy</strong>
+      <p>You agree not to use the Service for any unlawful or prohibited purpose. Prohibited activities include, but are not limited to:</p>
+      <ul>
+        <li>Violating any applicable local, state, federal, or international law or regulation.</li>
+        <li>Infringing upon or violating our intellectual property rights or the intellectual property rights of others.</li>
+        <li>Harassing, abusing, stalking, threatening, defaming, or otherwise violating the legal rights of others.</li>
+        <li>Transmitting any material that is unlawful, obscene, defamatory, pornographic, indecent, or invasive of another's privacy.</li>
+        <li>Distributing viruses, Trojan horses, worms, or other malicious software.</li>
+        <li>Engaging in "hacking," vulnerability scanning, or any activity that disrupts or interferes with the Service or any other network or system.</li>
+        <li>Sending unsolicited advertising or promotional materials ("spam").</li>
+        <li>Reselling the Service or using it for any commercial purpose not expressly permitted.</li>
+      </ul>
 
-            <strong>5. Acceptable Use Policy</strong>
-            <p>You agree not to use the Service for any unlawful or prohibited purpose. Prohibited activities include, but are not limited to:</p>
-            <ul>
-                <li>Violating any applicable local, state, federal, or international law or regulation.</li>
-                <li>Infringing upon or violating our intellectual property rights or the intellectual property rights of others.</li>
-                <li>Harassing, abusing, stalking, threatening, defaming, or otherwise violating the legal rights of others.</li>
-                <li>Transmitting any material that is unlawful, obscene, defamatory, pornographic, indecent, or invasive of another's privacy.</li>
-                <li>Distributing viruses, Trojan horses, worms, or other malicious software.</li>
-                <li>Engaging in "hacking," vulnerability scanning, or any activity that disrupts or interferes with the Service or any other network or system.</li>
-                <li>Sending unsolicited advertising or promotional materials ("spam").</li>
-                <li>Reselling the Service or using it for any commercial purpose not expressly permitted.</li>
-            </ul>
+      <strong>6. Monitoring and Content Filtering</strong>
+      <p>While we do not have an obligation to monitor your use of the Service, we reserve the right, in our sole discretion, to monitor, filter, block, or remove any content or activity that violates this Agreement or is otherwise objectionable.</p>
 
-            <strong>6. Monitoring and Content Filtering</strong>
-            <p>While we do not have an obligation to monitor your use of the Service, we reserve the right, in our sole discretion, to monitor, filter, block, or remove any content or activity that violates this Agreement or is otherwise objectionable.</p>
+      <strong>7. Limitation of Liability</strong>
+      <p><strong>To the maximum extent permitted by applicable law, in no event shall the Provider or its affiliates, directors, employees, agents, or suppliers (including, without limitation, Arista) be liable for any indirect, punitive, incidental, special, consequential, or exemplary damages, including without limitation damages for loss of profits, data, or other intangibles, arising out of or relating to the use of, or inability to use, the Service.</strong></p>
 
-            <strong>7. Limitation of Liability</strong>
-            <p><strong>To the maximum extent permitted by applicable law, in no event shall the Provider or its affiliates, directors, employees, agents, or suppliers (including, without limitation, Arista) be liable for any indirect, punitive, incidental, special, consequential, or exemplary damages, including without limitation damages for loss of profits, data, or other intangibles, arising out of or relating to the use of, or inability to use, the Service.</strong></p>
+      <strong>8. Indemnification</strong>
+      <p>You agree to indemnify, defend, and hold harmless the Provider and its affiliates, directors, employees, agents, and suppliers (including, without limitation, Arista) from and against any and all claims, liabilities, damages, losses, costs, and expenses (including reasonable attorneys' fees) arising out of or in any way connected with your access to or use of the Service or your violation of this Agreement.</p>
 
-            <strong>8. Indemnification</strong>
-            <p>You agree to indemnify, defend, and hold harmless the Provider and its affiliates, directors, employees, agents, and suppliers (including, without limitation, Arista) from and against any and all claims, liabilities, damages, losses, costs, and expenses (including reasonable attorneys' fees) arising out of or in any way connected with your access to or use of the Service or your violation of this Agreement.</p>
+      <strong>9. Termination of Service</strong>
+      <p>We may, in our sole discretion, terminate or suspend your access to the Service at any time, for any reason or no reason, without prior notice.</p>
 
-            <strong>9. Termination of Service</strong>
-            <p>We may, in our sole discretion, terminate or suspend your access to the Service at any time, for any reason or no reason, without prior notice.</p>
+      <strong>10. Privacy Policy</strong>
+      <p>By using the Service, you acknowledge that we may collect and use certain information, such as your device's MAC address and traffic data, for the purposes of providing and managing the network. For more information, please contact our <strong>[PROVIDER IT SERVICES]</strong>.</p>
 
-            <strong>10. Privacy Policy</strong>
-            <p>By using the Service, you acknowledge that we may collect and use certain information, such as your device's MAC address and traffic data, for the purposes of providing and managing the network. For more information, please contact our <strong>[PROVIDER IT SERVICES]</strong>.</p>
+      <strong>11. Governing Law and Jurisdiction</strong>
+      <p>This Agreement shall be governed by and construed in accordance with the laws of the State of <strong>[PROVIDER STATE]</strong>, without regard to its conflict of law principles. You agree to submit to the exclusive jurisdiction of the state and federal courts located in <strong>[PROVIDER LOCALITY]</strong> for the resolution of any disputes.</p>
 
-            <strong>11. Governing Law and Jurisdiction</strong>
-            <p>This Agreement shall be governed by and construed in accordance with the laws of the State of <strong>[PROVIDER STATE]</strong>, without regard to its conflict of law principles. You agree to submit to the exclusive jurisdiction of the state and federal courts located in <strong>[PROVIDER LOCALITY]</strong> for the resolution of any disputes.</p>
+      <strong>12. General Provisions</strong>
+      <p>This Agreement constitutes the entire agreement between you and the Provider regarding the Service. If any provision of this Agreement is found to be unenforceable, the remaining provisions will remain in full force and effect. Our failure to enforce any right or provision of this Agreement will not be considered a waiver of those rights.</p>
+      
+      <button id="close-modal-bottom" type="button" class="modal-footer-close">Close</button>
+      <div style="clear:both;"></div>
+    </section>
+  </div>
+<!-- A server-side portal is necessary for closed, private environments; i.e. NOT THIS -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const sharedSecret = 'OPEN_GUEST';
+      const acceptBtn = document.getElementById('accept-btn');
+      const termsLink = document.getElementById('terms-link');
+      const termsModal = document.getElementById('terms-modal');
+      const modalOverlay = document.getElementById('modal-overlay');
+      const closeModalBtnTop = document.getElementById('close-modal-top');
+      const closeModalBtnBottom = document.getElementById('close-modal-bottom');
 
-            <strong>12. General Provisions</strong>
-            <p>This Agreement constitutes the entire agreement between you and the Provider regarding the Service. If any provision of this Agreement is found to be unenforceable, the remaining provisions will remain in full force and effect. Our failure to enforce any right or provision of this Agreement will not be considered a waiver of those rights.</p>
-            
-            <button id="close-modal-bottom" type="button" class="modal-footer-close">Close</button>
-            <div style="clear:both;"></div>
-        </section>
-    </div>
-    <!-- A server-side portal is necessary for closed, private environments; i.e. NOT THIS -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const sharedSecret = 'OPEN_GUEST';
-            const acceptBtn = document.getElementById('accept-btn');
-            const termsLink = document.getElementById('terms-link');
-            const termsModal = document.getElementById('terms-modal');
-            const modalOverlay = document.getElementById('modal-overlay');
-            const closeModalBtnTop = document.getElementById('close-modal-top');
-            const closeModalBtnBottom = document.getElementById('close-modal-bottom');
+      termsLink.focus();
 
-            termsLink.focus();
+      const urlParams = new URLSearchParams(window.location.search);
+      const loginUrl = urlParams.get('login_url');
+      const challenge = urlParams.get('challenge');
+      
+      let hmacKey = null;
+      
+      async function prepareCryptoKey() {
+        try {
+          const encoder = new TextEncoder();
+          const secretData = encoder.encode(sharedSecret);
+          const secretHash = await window.crypto.subtle.digest('SHA-1', secretData);
+          hmacKey = await window.crypto.subtle.importKey(
+            'raw', secretHash, { name: 'HMAC', hash: 'SHA-1' }, false, ['sign']
+          );
+        } catch (error) {
+          console.error('Crypto key preparation failed:', error);
+          acceptBtn.textContent = 'Init Error!';
+          acceptBtn.disabled = true;
+        }
+      }
 
-            const urlParams = new URLSearchParams(window.location.search);
-            const loginUrl = urlParams.get('login_url');
-            const challenge = urlParams.get('challenge');
-            
-            let hmacKey = null;
-            
-            async function prepareCryptoKey() {
-                try {
-                    const encoder = new TextEncoder();
-                    const secretData = encoder.encode(sharedSecret);
-                    const secretHash = await window.crypto.subtle.digest('SHA-1', secretData);
-                    hmacKey = await window.crypto.subtle.importKey(
-                        'raw', secretHash, { name: 'HMAC', hash: 'SHA-1' }, false, ['sign']
-                    );
-                } catch (error) {
-                    console.error('Crypto key preparation failed:', error);
-                    acceptBtn.textContent = 'Init Error!';
-                    acceptBtn.disabled = true;
-                }
-            }
+      function bufferToHex(buffer) {
+        return Array.from(new Uint8Array(buffer))
+          .map(b => b.toString(16).padStart(2, '0'))
+          .join('');
+      }
 
-            function bufferToHex(buffer) {
-                return Array.from(new Uint8Array(buffer))
-                    .map(b => b.toString(16).padStart(2, '0'))
-                    .join('');
-            }
+      async function authenticate() {
+        try {
+          if (!hmacKey) {
+            throw new Error('HMAC key is not ready. The pre-calculation may have failed.');
+          }
+          const encoder = new TextEncoder();
+          const res = 'success';
+          const messageString = `res=${res}&challenge=${challenge}`;
+          const messageData = encoder.encode(messageString);
 
-            async function authenticate() {
-                try {
-                    if (!hmacKey) {
-                        throw new Error('HMAC key is not ready. The pre-calculation may have failed.');
-                    }
-                    const encoder = new TextEncoder();
-                    const res = 'success';
-                    const messageString = `res=${res}&challenge=${challenge}`;
-                    const messageData = encoder.encode(messageString);
+          const digestBuffer = await window.crypto.subtle.sign('HMAC', hmacKey, messageData);
+          const digest = bufferToHex(digestBuffer);
 
-                    const digestBuffer = await window.crypto.subtle.sign('HMAC', hmacKey, messageData);
-                    const digest = bufferToHex(digestBuffer);
+          const finalUrl = new URL(loginUrl);
+          finalUrl.searchParams.set('res', res);
+          finalUrl.searchParams.set('challenge', challenge);
+          finalUrl.searchParams.set('digest', digest);
 
-                    const finalUrl = new URL(loginUrl);
-                    finalUrl.searchParams.set('res', res);
-                    finalUrl.searchParams.set('challenge', challenge);
-                    finalUrl.searchParams.set('digest', digest);
+          window.location.href = finalUrl.href;
 
-                    window.location.href = finalUrl.href;
+        } catch (error) {
+          console.error('Authentication Error:', error);
+          acceptBtn.textContent = 'Error!';
+          acceptBtn.disabled = true;
+        }
+      }
 
-                } catch (error) {
-                    console.error('Authentication Error:', error);
-                    acceptBtn.textContent = 'Error!';
-                    acceptBtn.disabled = true;
-                }
-            }
+      if (loginUrl && challenge) {
+        prepareCryptoKey();
+        acceptBtn.addEventListener('click', authenticate);
 
-            if (loginUrl && challenge) {
-                prepareCryptoKey();
-                acceptBtn.addEventListener('click', authenticate);
-
-            } else {
-                acceptBtn.textContent = 'Accept & Connect (Testing Mode)';
-                acceptBtn.addEventListener('click', () => {
-                    window.location.href = 'https://www.google.com/';
-                });
-            }
-
-            const showModal = (event) => {
-                event.preventDefault();
-                termsModal.classList.remove('hidden');
-                modalOverlay.classList.remove('hidden');
-                closeModalBtnTop.focus();
-            };
-            const hideModal = () => {
-                termsModal.classList.add('hidden');
-                modalOverlay.classList.add('hidden');
-                acceptBtn.focus();
-            };
-
-            termsLink.addEventListener('click', showModal);
-            closeModalBtnTop.addEventListener('click', hideModal);
-            closeModalBtnBottom.addEventListener('click', hideModal);
-            modalOverlay.addEventListener('click', hideModal);
+      } else {
+        acceptBtn.textContent = 'Accept & Connect (Testing Mode)';
+        acceptBtn.addEventListener('click', () => {
+          window.location.href = 'https://www.google.com/';
         });
-    </script>
+      }
+
+      const showModal = (event) => {
+        event.preventDefault();
+        termsModal.classList.remove('hidden');
+        modalOverlay.classList.remove('hidden');
+        closeModalBtnTop.focus();
+      };
+      const hideModal = () => {
+        termsModal.classList.add('hidden');
+        modalOverlay.classList.add('hidden');
+        acceptBtn.focus();
+      };
+
+      termsLink.addEventListener('click', showModal);
+      closeModalBtnTop.addEventListener('click', hideModal);
+      closeModalBtnBottom.addEventListener('click', hideModal);
+      modalOverlay.addEventListener('click', hideModal);
+    });
+  </script>
 </body>
 </html>
