@@ -26,7 +26,7 @@
     }
 
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: system-ui, sans-serif;
       background-color: var(--background-color);
       margin: 0;
       display: flex;
@@ -64,8 +64,11 @@
       color: var(--lima-red);
       font-size: 3rem;
       margin: 1rem 0;
-      -webkit-text-stroke: 1px var(--lima-grey);
-      text-stroke: 1px var(--lima-grey);
+      text-shadow:
+        -1px -1px 0 var(--lima-grey),
+        1px -1px 0 var(--lima-grey),
+        -1px  1px 0 var(--lima-grey),
+        1px  1px 0 var(--lima-grey);
     }
 
     .message-container {
@@ -84,7 +87,17 @@
       font-weight: 700;
       margin: 0;
     }
-
+    .message-container .rocket-emoji {
+      font-size: 5rem;
+      margin: 1rem 0;
+      display: inline-block;
+      cursor: pointer;
+    }
+    .message-container .rocket-emoji.is-hidden {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease-out;
+    }
     .message-container p {
       color: var(--secondary-text-color);
       margin: 1rem 0 0 0;
@@ -107,13 +120,6 @@
     .arista-logo-img {
       max-width: 100px;
       height: auto;
-    }
-    
-    .rocket-emoji {
-      font-size: 5rem;
-      margin: 1rem 0;
-      display: inline-block;
-      cursor: pointer;
     }
 
     @keyframes rotateBg {
@@ -197,6 +203,7 @@
       const idleBounceAnimation = 'bounce-rocket 1s ease-in-out infinite alternate';
 
       function applyIdleBounce() {
+        rocket.classList.remove('is-hidden');
         rocket.style.animation = idleBounceAnimation;
         rocket.style.transform = 'none';
         rocket.style.opacity = '1';
@@ -240,8 +247,7 @@
             return waitForAnimationEnd(rocket, 'launch-off-screen-anim');
           })
           .then(() => {
-            rocket.style.display = 'none';
-            rocket.style.opacity = '0';
+            rocket.classList.add('is-hidden');
             isAnimating = false;
             body.classList.remove('gradient-active');
             try {
@@ -250,7 +256,7 @@
               console.warn("Could not close window automatically:", e);
             }
             setTimeout(() => {
-              if (rocket.style.display === 'none' || rocket.style.opacity === '0') {
+              if (rocket.classList.contains('is-hidden')) {
                 applyIdleBounce();
               }
             }, 500);
