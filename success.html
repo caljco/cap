@@ -136,6 +136,15 @@
       opacity: 0;
       pointer-events: none;
     }
+    .rocket-emoji.spin-right-active {
+      animation: spin-right-bounce-anim 1.5s ease-out forwards;
+    }
+    .rocket-emoji.spin-left-active {
+      animation: spin-left-return-anim 1.5s ease-out forwards;
+    }
+    .rocket-emoji.launch-active {
+      animation: launch-off-screen-anim 2s ease-in forwards;
+    }
 
     @keyframes rotateBg {
       from { transform: rotate(0deg); }
