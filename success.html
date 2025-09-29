@@ -72,6 +72,8 @@
       font-size: 3rem;
       width: 100%;
       margin-bottom: 1rem;
+      text-stroke: 1px var(--lima-grey);
+      -webkit-text-stroke: 1px var(--lima-grey);
     }
 
     .message-container {
@@ -127,6 +129,12 @@
       margin-bottom: 1rem;
       display: inline-block;
       cursor: pointer;
+      opacity: 1;
+      transition: opacity 0.3s ease-out;
+    }
+    .rocket-emoji.is-hidden {
+      opacity: 0;
+      pointer-events: none;
     }
 
     @keyframes rotateBg {
@@ -187,7 +195,7 @@
       </h2>
       <p class="rocket-emoji" role="img" aria-label="successful rocket">🚀</p>
       <p>Enjoy the Internet</p>
-      <p>You can close this window now.</p>
+      <p>You may close this window now.</p>
     </div>
 
     <footer class="page-footer">
@@ -205,77 +213,81 @@
     </footer>
 
     <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const rocket = document.querySelector('.rocket-emoji');
-        const body = document.body;
-        let isAnimating = false;
+    const rocket = document.querySelector('.rocket-emoji');
+    const body = document.body;
+    let isAnimating = false;
 
-        const idleBounceAnimation = 'bounce-rocket 1s ease-in-out infinite alternate';
+    const idleBounceAnimation = 'bounce-rocket 1s ease-in-out infinite alternate';
 
-        function applyIdleBounce() {
-          rocket.style.animation = idleBounceAnimation;
-          rocket.style.transform = 'none';
-          rocket.style.opacity = '1';
-          rocket.style.display = 'inline-block';
-        }
+    function applyIdleBounce() {
+      // Remove the 'is-hidden' class to make the rocket visible and bouncing
+      rocket.classList.remove('is-hidden');
+      rocket.style.animation = idleBounceAnimation;
+      rocket.style.transform = 'none';
+      rocket.style.opacity = '1'; // Ensure opacity is 1 if it was previously set to 0 by JS directly
+    }
 
-        applyIdleBounce();
+    applyIdleBounce();
 
-        function startLaunchSequence() {
-          if (isAnimating) return;
-          isAnimating = true;
-          body.classList.add('gradient-active');
-          rocket.style.animation = 'none';
-          void rocket.offsetWidth;
-          rocket.style.transform = 'translateX(0) translateY(0) rotate(0deg)';
-          rocket.style.opacity = '1';
-          rocket.style.display = 'inline-block';
-          rocket.style.animation = 'spin-right-bounce-anim 1.5s ease-out forwards';
-          function waitForAnimationEnd(element, animationName) {
-            return new Promise(resolve => {
-              const handler = (event) => {
-                if (event.target === element && event.animationName === animationName) {
-                  element.removeEventListener('animationend', handler);
-                  resolve();
-                }
-              };
-              element.addEventListener('animationend', handler);
-            });
-          }
-          waitForAnimationEnd(rocket, 'spin-right-bounce-anim')
-            .then(() => {
-              rocket.style.transform = 'translateX(153px) rotate(1080deg)';
-              void rocket.offsetWidth;
-              rocket.style.animation = 'spin-left-return-anim 1.5s ease-out forwards';
-              return waitForAnimationEnd(rocket, 'spin-left-return-anim');
-            })
-            .then(() => {
-              rocket.style.transform = 'translateX(0) rotate(-1080deg)';
-              void rocket.offsetWidth;
-              rocket.style.animation = 'launch-off-screen-anim 2s ease-in forwards';
-              return waitForAnimationEnd(rocket, 'launch-off-screen-anim');
-            })
-            .then(() => {
-              rocket.style.display = 'none';
-              rocket.style.opacity = '0';
-              isAnimating = false;
-              body.classList.remove('gradient-active');
-            try {
-              window.close();
-              // Note: window.close() can only close windows that were opened by script.
-              // Modern browsers often prevent pages from closing themselves for security reasons
-            } catch (e) {
-              console.warn("Could not close window automatically:", e);
+    function startLaunchSequence() {
+      if (isAnimating) return;
+      isAnimating = true;
+
+      body.classList.add('gradient-active');
+
+      rocket.style.animation = 'none';
+      void rocket.offsetWidth; // Trigger reflow
+      rocket.style.transform = 'translateX(0) translateY(0) rotate(0deg)';
+      rocket.style.opacity = '1'; // Ensure rocket is fully visible at start of animation
+
+      function waitForAnimationEnd(element, animationName) {
+        return new Promise(resolve => {
+          const handler = (event) => {
+            if (event.target === element && event.animationName === animationName) {
+              element.removeEventListener('animationend', handler);
+              resolve();
             }
-            // --- Apply idle bounce for scenarios where window.close() fails ---
-            setTimeout(() => {
-              if (rocket.style.display === 'none' || rocket.style.opacity === '0') {
-                   applyIdleBounce();
-              }
-            }, 500);
-          })
-          .catch(error => console.error("Animation sequence failed:", error));
-        }
+          };
+          element.addEventListener('animationend', handler);
+        });
+      }
+
+      rocket.style.animation = 'spin-right-bounce-anim 1.5s ease-out forwards';
+      waitForAnimationEnd(rocket, 'spin-right-bounce-anim')
+        .then(() => {
+          rocket.style.transform = 'translateX(153px) rotate(1080deg)';
+          void rocket.offsetWidth;
+          rocket.style.animation = 'spin-left-return-anim 1.5s ease-out forwards';
+          return waitForAnimationEnd(rocket, 'spin-left-return-anim');
+        })
+        .then(() => {
+          rocket.style.transform = 'translateX(0) rotate(-1080deg)';
+          void rocket.offsetWidth;
+          rocket.style.animation = 'launch-off-screen-anim 2s ease-in forwards';
+          return waitForAnimationEnd(rocket, 'launch-off-screen-anim');
+        })
+        .then(() => {
+          // Instead of display: none, add the 'is-hidden' class
+          rocket.classList.add('is-hidden');
+          isAnimating = false;
+
+          body.classList.remove('gradient-active');
+
+          try {
+            window.close();
+          } catch (e) {
+            console.warn("Could not close window automatically:", e);
+          }
+
+          setTimeout(() => {
+            // Check if the rocket is still hidden (meaning window.close failed)
+            if (rocket.classList.contains('is-hidden')) {
+              applyIdleBounce();
+            }
+          }, 500);
+        })
+        .catch(error => console.error("Animation sequence failed:", error));
+    }
         rocket.addEventListener('click', startLaunchSequence);
         rocket.addEventListener('touchstart', startLaunchSequence);
       });
