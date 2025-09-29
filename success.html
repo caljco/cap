@@ -151,6 +151,17 @@
       0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
       100% { transform: translate(100vw, -100vh); opacity: 0; }
     }
+    @media (max-width: 480px) {
+      .page-header h1 {
+        font-size: 2.2rem;
+      }
+      .message-container {
+        padding: 1.5rem;
+      }
+      .message-container .success-message {
+        font-size: 2rem;
+      }
+    }
   </style>
   </head>
   <body>
@@ -188,7 +199,7 @@
       document.addEventListener('DOMContentLoaded', () => {
         const rocket = document.querySelector('.rocket-emoji');
         const body = document.body;
-        let isAnimating = false; // Flag to prevent re-triggering during animation
+        let isAnimating = false;
 
         const idleBounceAnimation = 'bounce-rocket 1s ease-in-out infinite alternate';
 
@@ -199,29 +210,17 @@
           rocket.style.display = 'inline-block';
         }
 
-        // Phase 0: Initialize with bounce animation
         applyIdleBounce();
 
         function startLaunchSequence() {
           if (isAnimating) return;
           isAnimating = true;
           body.classList.add('gradient-active');
-
-
-          // On Trigger:
-          // Stop the current bounce animation by setting it to 'none'
-          // Force a reflow to ensure the animation state is truly cleared
-          // Reset transform and opacity to a known starting point
           rocket.style.animation = 'none';
           void rocket.offsetWidth;
           rocket.style.transform = 'translateX(0) translateY(0) rotate(0deg)';
           rocket.style.opacity = '1';
           rocket.style.display = 'inline-block';
-
-
-          // Phase 1: Spin Right and Bounce off side
-          // Set the full animation property directly in JS for more control
-          // Use a Promise-based approach for cleaner sequencing of animations
           rocket.style.animation = 'spin-right-bounce-anim 1.5s ease-out forwards';
           function waitForAnimationEnd(element, animationName) {
             return new Promise(resolve => {
@@ -234,25 +233,21 @@
               element.addEventListener('animationend', handler);
             });
           }
-
           waitForAnimationEnd(rocket, 'spin-right-bounce-anim')
             .then(() => {
-              // Phase 2: Spin Left and Return to Center
-              rocket.style.transform = 'translateX(153px) rotate(1080deg)'; // Explicit end of phase 1 for smooth start of phase 2
-              void rocket.offsetWidth; // Force reflow
+              rocket.style.transform = 'translateX(153px) rotate(1080deg)';
+              void rocket.offsetWidth;
               rocket.style.animation = 'spin-left-return-anim 1.5s ease-out forwards';
               return waitForAnimationEnd(rocket, 'spin-left-return-anim');
             })
             .then(() => {
-              // Phase 3: Launch Off Screen
-              rocket.style.transform = 'translateX(0) rotate(-1080deg)'; // Explicit end of phase 2
-              void rocket.offsetWidth; // Force reflow
+              rocket.style.transform = 'translateX(0) rotate(-1080deg)';
+              void rocket.offsetWidth;
               rocket.style.animation = 'launch-off-screen-anim 2s ease-in forwards';
               return waitForAnimationEnd(rocket, 'launch-off-screen-anim');
             })
             .then(() => {
-              // All animations done
-              rocket.style.display = 'none'; // Keep it hidden after launch
+              rocket.style.display = 'none';
               rocket.style.opacity = '0';
               isAnimating = false;
               body.classList.remove('gradient-active');
@@ -260,24 +255,18 @@
               window.close();
               // Note: window.close() can only close windows that were opened by script.
               // Modern browsers often prevent pages from closing themselves for security reasons
-              // if they weren't opened by window.open().
             } catch (e) {
               console.warn("Could not close window automatically:", e);
             }
-
-            // --- NEW: Apply idle bounce for scenarios where window.close() fails ---
-            // Use a small delay to give the browser a moment to attempt closing,
-            // and to make the "reappearance" feel less immediate.
+            // --- Apply idle bounce for scenarios where window.close() fails ---
             setTimeout(() => {
               if (rocket.style.display === 'none' || rocket.style.opacity === '0') {
-                   // Only reapply if it's still hidden, implying close failed
                    applyIdleBounce();
               }
-            }, 500); // Wait 500ms before checking/reapplying bounce
+            }, 500);
           })
           .catch(error => console.error("Animation sequence failed:", error));
         }
-
         rocket.addEventListener('click', startLaunchSequence);
         rocket.addEventListener('touchstart', startLaunchSequence);
       });
