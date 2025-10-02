@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,11 +10,11 @@
     :root {
       --background-color: #f0f2f5;
       --portal-background: #ffffff;
-      --lima-red: #B80028;
-      --lima-grey: #E6E6E6;
-      --success-green: #28a745;
       --primary-text-color: #333;
       --secondary-text-color: #6c757d;
+      --success-green: #28a745;
+      --lima-red: #B80028;
+      --lima-grey: #E6E6E6;
     }
 
     html {
@@ -24,7 +25,7 @@
     *, *:before, *:after {
       box-sizing: inherit;
     }
-    
+
     h1, h2, p {
       margin: 0;
     }
@@ -32,14 +33,12 @@
     body {
       font-family: system-ui, sans-serif;
       background-color: var(--background-color);
-      margin: 0;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
       color: var(--primary-text-color);
-      line-height: 1.5;
       position: relative;
       overflow: hidden;
       transition: background-color 0.5s ease-in-out;
@@ -65,17 +64,18 @@
     }
     .page-header,
     .page-footer {
-      margin-top: 0.5rem;
       display: flex;
       flex-direction: column;
       align-items: center;
     }
 
+    .page-footer {
+      margin-top: 2rem;
+    }
+
     .page-header h1 {
       color: var(--lima-red);
       font-size: 3rem;
-      margin-top: 0;
-      padding-top: 0;
       text-shadow:
         -1px -1px 0 var(--lima-grey),
         1px -1px 0 var(--lima-grey),
@@ -85,7 +85,8 @@
 
     .message-container {
       background-color: var(--portal-background);
-      padding: 2rem;
+      padding-top: 2rem;
+      padding-bottom: 0.5rem;
       border-radius: 8px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       text-align: center;
@@ -95,18 +96,15 @@
 
     .message-container .guest-wifi {
       font-size: 2rem;
-      margin: 0;
     }
 
     .message-container .success-message {
       color: var(--success-green);
       font-size: 2.5rem;
       font-weight: 700;
-      margin: 0;
     }
     .message-container .rocket-emoji {
       font-size: 5rem;
-      margin: 1rem 0;
       display: inline-block;
       cursor: pointer;
       will-change: transform, opacity; 
@@ -118,20 +116,17 @@
     }
     .message-container p {
       color: var(--secondary-text-color);
-      margin: 0;
     }
 
     .spartan-logo-svg {
       display: block;
-      margin-top: 0;
-      padding-top: 0;
       width: 150px;
       height: auto;
     }
 
     .arista-logo-img {
-      max-width: 98px;
-      height: auto;
+      width: 48px;
+      height: 18px;
     }
 
     @keyframes rotateBg {
@@ -161,18 +156,20 @@
 
     @media (max-width: 480px) {
       .page-header h1 {
-        font-size: 1.8rem;
-        margin: 0.5rem 0;
+        font-size: 1.5rem;
       }
       .message-container {
-        padding: 1.5rem;
-        margin-top: 0.5rem;
-        margin-bottom: 0.5rem;
+        padding-top: 1rem;
+        padding-bottom: 0.2rem;
+      }
+      .message-container .guest-wifi {
+        font-size: 1rem;
       }
       .message-container .success-message {
-        font-size: 2rem;
+        font-size: 1.8rem;
+      .message-container .rocket-emoji {
+        font-size: 3rem;
       }
-      .page-header,
       .page-footer {
         margin-top: 0.5rem;
       }
